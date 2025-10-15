@@ -11,7 +11,7 @@ int main() {
     
     std::cout << "Программа для работы с фигурами вращения"<< std::endl;
     while (true) {
-        std::cout << "\nМеню: " << std::endl;
+        std::cout << "\n Меню: " << std::endl;
         std::cout << "1 добавить фигуру" << std::endl;
         std::cout << "2 удалить фигуру по индексу" << std::endl;
         std::cout << "3 показать все фигуры" << std::endl;

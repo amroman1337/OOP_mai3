@@ -83,9 +83,6 @@ public:
     bool equals(const Figure* other) const override;
 };
 
-std::ostream& operator<<(std::ostream& output, const Figure& figure);
-std::istream& operator>>(std::istream& input, Figure& figure);
-
 class FigureArray {
 private:
     std::vector<std::unique_ptr<Figure>> figures;
@@ -100,4 +97,6 @@ public:
     void printAll() const;
 };
 
+std::ostream& operator<<(std::ostream& output, const Figure& figure);
+std::istream& operator>>(std::istream& input, Figure& figure);
 std::unique_ptr<Figure> createFigure(int choice);
