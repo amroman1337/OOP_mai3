@@ -43,16 +43,16 @@ std::pair<double, double> Triangle::getCenter() const {
 }
 
 double Triangle::getArea() const {
-    return (sqrt(3)/4)*side*side;
+    return (sqrt(3)/4)*pow(side, 2);
 }
 
 void Triangle::printCoords(std::ostream& output) const {
     double height = (sqrt(3)/2)*side;
     double r = height*2/3;
     output << "Bершины треугольника: " << std::endl;
-    output << "1 (" << centerX << ", " << centerY+r << ")" << std::endl;
-    output << "2 (" << centerX-side/2 << ", " << centerY-r/2 << ")" << std::endl;
-    output << "3 (" << centerX+side/2 << ", " << centerY-r/2 << ")" << std::endl;
+    output << centerX << centerY+r << std::endl;
+    output << centerX-side/2 << centerY-r/2 << std::endl;
+    output << centerX+side/2 << centerY-r/2 << std::endl;
 }
 
 void Triangle::readCoords(std::istream& input) {
@@ -62,7 +62,7 @@ void Triangle::readCoords(std::istream& input) {
     input >> centerX >> centerY;
 }
 
-std::unique_ptr<Figure> Triangle::clone() const {
+std::unique_ptr<Figure> Triangle::copyFig() const {
     return std::make_unique<Triangle>(*this);
 }
 
@@ -118,10 +118,10 @@ double Square::getArea() const {
 void Square::printCoords(std::ostream& output) const {
     double hS = side / 2;
     output << "Вершины квадрата:" << std::endl;
-    output << "1 (" << centerX - hS << ", " << centerY - hS << ")" << std::endl;
-    output << "2 (" << centerX + hS << ", " << centerY - hS << ")" << std::endl;
-    output << "3 (" << centerX + hS << ", " << centerY + hS << ")" << std::endl;
-    output << "4 (" << centerX - hS << ", " << centerY + hS << ")" << std::endl;
+    output << centerX-hS << centerY-hS << std::endl;
+    output << centerX+hS << centerY-hS << std::endl;
+    output << centerX+hS << centerY+hS << std::endl;
+    output << centerX-hS << centerY+hS << std::endl;
 }
 
 void Square::readCoords(std::istream& input) {
@@ -131,7 +131,7 @@ void Square::readCoords(std::istream& input) {
     input >> centerX >> centerY;
 }
 
-std::unique_ptr<Figure> Square::clone() const {
+std::unique_ptr<Figure> Square::copyFig() const {
     return std::make_unique<Square>(*this);
 }
 
@@ -194,10 +194,10 @@ void Rectangle::printCoords(std::ostream& output) const {
     double hW = width/2;
     double hH = height/2;
     output << "вершины прямоугольника:" << std::endl;
-    output << "1 (" << centerX-hW << ", " << centerY-hH << ")" << std::endl;
-    output << "2 (" << centerX+hW << ", " << centerY-hH << ")" << std::endl;
-    output << "3 (" << centerX+hW << ", " << centerY+hH << ")" << std::endl;;
-    output << "4 (" << centerX-hW << ", " << centerY+hH << ")" << std::endl;
+    output << centerX-hW << centerY-hH << std::endl;
+    output << centerX+hW << centerY-hH << std::endl;
+    output << centerX+hW << centerY+hH << std::endl;;
+    output << centerX-hW << centerY+hH << std::endl;
 }
 
 void Rectangle::readCoords(std::istream& input) {
@@ -205,11 +205,11 @@ void Rectangle::readCoords(std::istream& input) {
     input >> width;
     std::cout << "введите высоту прямоугольника ";
     input >> height;
-    std::cout << "введите координаты центра (x y) ";
+    std::cout << "введите координаты центра (x;y) ";
     input >> centerX >> centerY;
 }
 
-std::unique_ptr<Figure> Rectangle::clone() const {
+std::unique_ptr<Figure> Rectangle::copyFig() const {
     return std::make_unique<Rectangle>(*this);
 }
 

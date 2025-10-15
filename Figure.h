@@ -14,7 +14,7 @@ public:
     virtual void printCoords(std::ostream& output) const = 0;
     virtual void readCoords(std::istream& input) = 0;
     virtual operator double() const;
-    virtual std::unique_ptr<Figure> clone() const = 0;
+    virtual std::unique_ptr<Figure> copyFig() const = 0;
     virtual bool equals(const Figure* other) const = 0;
     bool operator==(const Figure& other) const;
 };
@@ -34,7 +34,7 @@ public:
     double getArea() const override;
     void printCoords(std::ostream& output) const override;
     void readCoords(std::istream& input) override;
-    std::unique_ptr<Figure> clone() const override;
+    std::unique_ptr<Figure> copyFig() const override;
     bool equals(const Figure* other) const override;
 private:
     double side;
@@ -55,7 +55,7 @@ public:
     double getArea() const override;
     void printCoords(std::ostream& output) const override;
     void readCoords(std::istream& input) override;
-    std::unique_ptr<Figure> clone() const override;
+    std::unique_ptr<Figure> copyFig() const override;
     bool equals(const Figure* other) const override;
 private:
     double side;
@@ -76,7 +76,7 @@ public:
     double getArea() const override;
     void printCoords(std::ostream& output) const override;
     void readCoords(std::istream& input) override;
-    std::unique_ptr<Figure> clone() const override;
+    std::unique_ptr<Figure> copyFig() const override;
     bool equals(const Figure* other) const override;
 private:
     double width, height;
