@@ -11,8 +11,8 @@ public:
     virtual ~Figure() = default;
     virtual std::pair<double, double> getCenter() const = 0;
     virtual double getArea() const = 0;
-    virtual void printVertices(std::ostream& os) const = 0;
-    virtual void readData(std::istream& is) = 0;
+    virtual void printVertices(std::ostream& output) const = 0;
+    virtual void readData(std::istream& input) = 0;
     virtual operator double() const;
     virtual std::unique_ptr<Figure> clone() const = 0;
     virtual bool equals(const Figure* other) const = 0;
@@ -24,7 +24,6 @@ class Triangle : public Figure {
 private:
     double side;
     double centerX, centerY;
-    
 public:
     Triangle();
     Triangle(double s, double x, double y);
@@ -36,8 +35,8 @@ public:
     
     std::pair<double, double> getCenter() const override;
     double getArea() const override;
-    void printVertices(std::ostream& os) const override;
-    void readData(std::istream& is) override;
+    void printVertices(std::ostream& output) const override;
+    void readData(std::istream& input) override;
     std::unique_ptr<Figure> clone() const override;
     bool equals(const Figure* other) const override;
 };
@@ -46,7 +45,6 @@ class Square : public Figure {
 private:
     double side;
     double centerX, centerY;
-    
 public:
     Square();
     Square(double s, double x, double y);
@@ -58,8 +56,8 @@ public:
     
     std::pair<double, double> getCenter() const override;
     double getArea() const override;
-    void printVertices(std::ostream& os) const override;
-    void readData(std::istream& is) override;
+    void printVertices(std::ostream& output) const override;
+    void readData(std::istream& input) override;
     std::unique_ptr<Figure> clone() const override;
     bool equals(const Figure* other) const override;
 };
@@ -68,7 +66,6 @@ class Rectangle : public Figure {
 private:
     double width, height;
     double centerX, centerY;
-    
 public:
     Rectangle();
     Rectangle(double w, double h, double x, double y);
@@ -80,19 +77,18 @@ public:
     
     std::pair<double, double> getCenter() const override;
     double getArea() const override;
-    void printVertices(std::ostream& os) const override;
-    void readData(std::istream& is) override;
+    void printVertices(std::ostream& output) const override;
+    void readData(std::istream& input) override;
     std::unique_ptr<Figure> clone() const override;
     bool equals(const Figure* other) const override;
 };
 
-std::ostream& operator<<(std::ostream& os, const Figure& figure);
-std::istream& operator>>(std::istream& is, Figure& figure);
+std::ostream& operator<<(std::ostream& output, const Figure& figure);
+std::istream& operator>>(std::istream& input, Figure& figure);
 
 class FigureArray {
 private:
     std::vector<std::unique_ptr<Figure>> figures;
-    
 public:
     void addFigure(std::unique_ptr<Figure> figure);
     void removeFigure(int index);

@@ -7,7 +7,7 @@ int main() {
     SetConsoleCP(CP_UTF8);
 
     FigureArray figureArray;
-    int choice;
+    int key;
     
     std::cout << "Программа для работы с фигурами вращения"<< std::endl;
     while (true) {
@@ -18,9 +18,9 @@ int main() {
         std::cout << "4 вычислить общую площадь" << std::endl;
         std::cout << "5 Bыход" << std::endl;
         std::cout << "выберите действие: " << std::endl;
-        std::cin >> choice;
+        std::cin >> key;
         
-        switch (choice) {
+        switch (key) {
             case 1: {
                 std::cout << "Выберите тип фигуры: " << std::endl;
                 std::cout << "1-Треугольник " << std::endl;
@@ -62,7 +62,7 @@ int main() {
             }
             case 4: {
                 double totalArea = figureArray.getTotalArea();
-                std::cout << "0бщая площадь всех фигур: " << totalArea << std::endl;
+                std::cout << "0бщая площадь фигур: " << totalArea << std::endl;
                 break;
             }
             case 5:

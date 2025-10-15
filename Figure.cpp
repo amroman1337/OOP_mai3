@@ -10,7 +10,7 @@ bool Figure::operator==(const Figure& other) const {
 
 Triangle::Triangle() : side(0), centerX(0), centerY(0) {}
 
-Triangle::Triangle(double s, double x, double y): side(s), centerX(x), centerY(y) {}
+Triangle::Triangle(double SIDE, double x, double y): side(SIDE), centerX(x), centerY(y) {}
 
 Triangle::Triangle(const Triangle& other):
     side(other.side), centerX(other.centerX), centerY(other.centerY) {}
@@ -46,20 +46,20 @@ double Triangle::getArea() const {
     return (sqrt(3) / 4) * side * side;
 }
 
-void Triangle::printVertices(std::ostream& os) const {
+void Triangle::printVertices(std::ostream& output) const {
     double height = (sqrt(3) / 2) * side;
     double r = height * 2 / 3;
-    os << "Bершины треугольника: " << std::endl;
-    os << "1 (" << centerX << ", " << centerY + r << ")" << std::endl;
-    os << "2 (" << centerX - side/2 << ", " << centerY - r/2 << ")" << std::endl;
-    os << "3 (" << centerX + side/2 << ", " << centerY - r/2 << ")" << std::endl;
+    output << "Bершины треугольника: " << std::endl;
+    output << "1 (" << centerX << ", " << centerY + r << ")" << std::endl;
+    output << "2 (" << centerX - side/2 << ", " << centerY - r/2 << ")" << std::endl;
+    output << "3 (" << centerX + side/2 << ", " << centerY - r/2 << ")" << std::endl;
 }
 
-void Triangle::readData(std::istream& is) {
+void Triangle::readData(std::istream& input) {
     std::cout << "Введите длину стороны треугольника: ";
-    is >> side;
+    input >> side;
     std::cout << "Введите координаты центра (x;y): ";
-    is >> centerX >> centerY;
+    input >> centerX >> centerY;
 }
 
 std::unique_ptr<Figure> Triangle::clone() const {
@@ -68,7 +68,9 @@ std::unique_ptr<Figure> Triangle::clone() const {
 
 bool Triangle::equals(const Figure* other) const {
     const Triangle* t = dynamic_cast<const Triangle*>(other);
-    if (!t) return false;
+    if (!t){
+        return false;
+    }
     return side == t->side && centerX == t->centerX && centerY == t->centerY;
 }
 
@@ -77,7 +79,7 @@ bool Triangle::equals(const Figure* other) const {
 
 Square::Square() : side(0), centerX(0), centerY(0) {}
 
-Square::Square(double s, double x, double y) : side(s), centerX(x), centerY(y) {}
+Square::Square(double SIDE, double x, double y) : side(SIDE), centerX(x), centerY(y) {}
 
 Square::Square(const Square& other):
     side(other.side), centerX(other.centerX), centerY(other.centerY) {}
@@ -113,20 +115,20 @@ double Square::getArea() const {
     return side * side;
 }
 
-void Square::printVertices(std::ostream& os) const {
-    double halfSide = side / 2;
-    os << "Вершины квадрата:" << std::endl;
-    os << "1 (" << centerX - halfSide << ", " << centerY - halfSide << ")" << std::endl;
-    os << "2 (" << centerX + halfSide << ", " << centerY - halfSide << ")" << std::endl;
-    os << "3 (" << centerX + halfSide << ", " << centerY + halfSide << ")" << std::endl;
-    os << "4 (" << centerX - halfSide << ", " << centerY + halfSide << ")" << std::endl;
+void Square::printVertices(std::ostream& output) const {
+    double hS = side / 2;
+    output << "Вершины квадрата:" << std::endl;
+    output << "1 (" << centerX - hS << ", " << centerY - hS << ")" << std::endl;
+    output << "2 (" << centerX + hS << ", " << centerY - hS << ")" << std::endl;
+    output << "3 (" << centerX + hS << ", " << centerY + hS << ")" << std::endl;
+    output << "4 (" << centerX - hS << ", " << centerY + hS << ")" << std::endl;
 }
 
-void Square::readData(std::istream& is) {
+void Square::readData(std::istream& input) {
     std::cout << "Введите значение стороны квадрата: ";
-    is >> side;
+    input >> side;
     std::cout << "Введите координаты центра (x;y): ";
-    is >> centerX >> centerY;
+    input >> centerX >> centerY;
 }
 
 std::unique_ptr<Figure> Square::clone() const {
@@ -135,7 +137,9 @@ std::unique_ptr<Figure> Square::clone() const {
 
 bool Square::equals(const Figure* other) const {
     const Square* s = dynamic_cast<const Square*>(other);
-    if (!s) return false;
+    if (!s){
+        return false;
+    }
     return side == s->side && centerX == s->centerX && centerY == s->centerY;
 }
 
@@ -186,23 +190,23 @@ double Rectangle::getArea() const {
     return width * height;
 }
 
-void Rectangle::printVertices(std::ostream& os) const {
-    double halfWidth = width / 2;
-    double halfHeight = height / 2;
-    os << "Вершины прямоугольника:" << std::endl;
-    os << "1 (" << centerX - halfWidth << ", " << centerY - halfHeight << ")" << std::endl;
-    os << "2 (" << centerX + halfWidth << ", " << centerY - halfHeight << ")" << std::endl;
-    os << "3 (" << centerX + halfWidth << ", " << centerY + halfHeight << ")" << std::endl;;
-    os << "4 (" << centerX - halfWidth << ", " << centerY + halfHeight << ")" << std::endl;
+void Rectangle::printVertices(std::ostream& output) const {
+    double hW = width / 2;
+    double hH = height / 2;
+    output << "Вершины прямоугольника:" << std::endl;
+    output << "1 (" << centerX - hW << ", " << centerY - hH << ")" << std::endl;
+    output << "2 (" << centerX + hW << ", " << centerY - hH << ")" << std::endl;
+    output << "3 (" << centerX + hW << ", " << centerY + hH << ")" << std::endl;;
+    output << "4 (" << centerX - hW << ", " << centerY + hH << ")" << std::endl;
 }
 
-void Rectangle::readData(std::istream& is) {
+void Rectangle::readData(std::istream& input) {
     std::cout << "Введите ширину прямоугольника: ";
-    is >> width;
+    input >> width;
     std::cout << "Введите высоту прямоугольника: ";
-    is >> height;
+    input >> height;
     std::cout << "Введите координаты центра (x y): ";
-    is >> centerX >> centerY;
+    input >> centerX >> centerY;
 }
 
 std::unique_ptr<Figure> Rectangle::clone() const {
@@ -216,15 +220,14 @@ bool Rectangle::equals(const Figure* other) const {
            centerX == r->centerX && centerY == r->centerY;
 }
 
-
-std::ostream& operator<<(std::ostream& os, const Figure& figure) {
-    figure.printVertices(os);
-    return os;
+std::ostream& operator<<(std::ostream& output, const Figure& figure) {
+    figure.printVertices(output);
+    return output;
 }
 
-std::istream& operator>>(std::istream& is, Figure& figure) {
-    figure.readData(is);
-    return is;
+std::istream& operator>>(std::istream& input, Figure& figure) {
+    figure.readData(input);
+    return input;
 }
 
 void FigureArray::addFigure(std::unique_ptr<Figure> figure) {
@@ -266,8 +269,8 @@ void FigureArray::printAll() const {
     }
 }
 
-std::unique_ptr<Figure> createFigure(int choice) {
-    switch (choice) {
+std::unique_ptr<Figure> createFigure(int key) {
+    switch (key) {
         case 1:
             return std::make_unique<Triangle>();
         case 2:
