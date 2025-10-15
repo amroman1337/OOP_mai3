@@ -46,7 +46,7 @@ double Triangle::getArea() const {
     return (sqrt(3)/4)*side*side;
 }
 
-void Triangle::printVertices(std::ostream& output) const {
+void Triangle::printCoords(std::ostream& output) const {
     double height = (sqrt(3)/2)*side;
     double r = height*2/3;
     output << "Bершины треугольника: " << std::endl;
@@ -55,7 +55,7 @@ void Triangle::printVertices(std::ostream& output) const {
     output << "3 (" << centerX+side/2 << ", " << centerY-r/2 << ")" << std::endl;
 }
 
-void Triangle::readData(std::istream& input) {
+void Triangle::readCoords(std::istream& input) {
     std::cout << "Введите сторону треугольника ";
     input >> side;
     std::cout << "Введите координаты центра (x;y) ";
@@ -115,7 +115,7 @@ double Square::getArea() const {
     return side * side;
 }
 
-void Square::printVertices(std::ostream& output) const {
+void Square::printCoords(std::ostream& output) const {
     double hS = side / 2;
     output << "Вершины квадрата:" << std::endl;
     output << "1 (" << centerX - hS << ", " << centerY - hS << ")" << std::endl;
@@ -124,7 +124,7 @@ void Square::printVertices(std::ostream& output) const {
     output << "4 (" << centerX - hS << ", " << centerY + hS << ")" << std::endl;
 }
 
-void Square::readData(std::istream& input) {
+void Square::readCoords(std::istream& input) {
     std::cout << "Введите значение стороны квадрата: ";
     input >> side;
     std::cout << "Введите координаты центра (x;y): ";
@@ -190,7 +190,7 @@ double Rectangle::getArea() const {
     return width * height;
 }
 
-void Rectangle::printVertices(std::ostream& output) const {
+void Rectangle::printCoords(std::ostream& output) const {
     double hW = width/2;
     double hH = height/2;
     output << "вершины прямоугольника:" << std::endl;
@@ -200,7 +200,7 @@ void Rectangle::printVertices(std::ostream& output) const {
     output << "4 (" << centerX-hW << ", " << centerY+hH << ")" << std::endl;
 }
 
-void Rectangle::readData(std::istream& input) {
+void Rectangle::readCoords(std::istream& input) {
     std::cout << "введите ширину прямоугольника ";
     input >> width;
     std::cout << "введите высоту прямоугольника ";
@@ -221,11 +221,11 @@ bool Rectangle::equals(const Figure* other) const {
     return width == r->width && height == r->height && centerX == r->centerX && centerY == r->centerY;
 }
 
-void FigureArray::addFigure(std::unique_ptr<Figure> figure) {
+void FigureArray::addFig(std::unique_ptr<Figure> figure) {
     figures.push_back(std::move(figure));
 }
 
-void FigureArray::removeFigure(int index) {
+void FigureArray::removeFig(int index) {
     if (index > -1 && index < figures.size()) {
         figures.erase(figures.begin() + index);
     }
@@ -235,7 +235,7 @@ size_t FigureArray::size() const {
     return figures.size();
 }
 
-Figure* FigureArray::getFigure(int index) {
+Figure* FigureArray::getFig(int index) {
     if (index > -1 && index < figures.size()) {
         return figures[index].get();
     }
@@ -261,16 +261,16 @@ void FigureArray::printAll() const {
 }
 
 std::ostream& operator<<(std::ostream& output, const Figure& figure) {
-    figure.printVertices(output);
+    figure.printCoords(output);
     return output;
 }
 
 std::istream& operator>>(std::istream& input, Figure& figure) {
-    figure.readData(input);
+    figure.readCoords(input);
     return input;
 }
 
-std::unique_ptr<Figure> createFigure(int key) {
+std::unique_ptr<Figure> createFig(int key) {
     switch (key) {
         case 1:
             return std::make_unique<Triangle>();

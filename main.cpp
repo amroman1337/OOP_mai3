@@ -8,8 +8,7 @@ int main() {
 
     FigureArray figureArray;
     int key;
-    
-    std::cout << "Программа для работы с фигурами вращения"<< std::endl;
+    std::cout << "Лабораторная работа номер 3, вариант 33"<< std::endl;
     while (true) {
         std::cout << "\n Меню: " << std::endl;
         std::cout << "1 добавить фигуру" << std::endl;
@@ -30,38 +29,40 @@ int main() {
                 int figureType;
                 std::cin >> figureType;
                 
-                auto figure = createFigure(figureType);
+                auto figure=createFig(figureType);
                 if (figure) {
                     std::cin >> *figure;
-                    figureArray.addFigure(std::move(figure));
+                    figureArray.addFig(std::move(figure));
                     std::cout << "фигура добавлена!" << std::endl;
-                } else {
+                } 
+                else {
                     std::cout << "error: неверный выбор фигуры" << std::endl;
                 }
                 break;
             }
             case 2: {
-                if (figureArray.size() == 0) {
+                if (figureArray.size()==0) {
                     std::cout << "Mассив фигур пуст" << std::endl;;
                     break;
                 }
                 std::cout << "Bведите индекс фигуры для удаления (1-" << figureArray.size() << "): ";
                 int index;
                 std::cin >> index;
-                figureArray.removeFigure(index - 1);
+                figureArray.removeFig(index-1);
                 std::cout << "фигура успешно удалена" << std::endl;
                 break;
             }
             case 3: {
-                if (figureArray.size() == 0) {
+                if (figureArray.size()==0) {
                     std::cout << "Mассив фигур пуст" << std::endl;
-                } else {
+                } 
+                else {
                     figureArray.printAll();
                 }
                 break;
             }
             case 4: {
-                double totalArea = figureArray.getTotalArea();
+                double totalArea=figureArray.getTotalArea();
                 std::cout << "0бщая площадь фигур: " << totalArea << std::endl;
                 break;
             }
