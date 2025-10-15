@@ -2,79 +2,74 @@
 #include <sstream>
 #include <gtest/gtest.h>
 
-// Triangle test cases
-class TriangleTest : public ::testing::Test {
-protected:
-    void SetUp() override {
-        default_triangle = std::make_unique<Triangle>();
-        param_triangle = std::make_unique<Triangle>(3.0, 1.0, 2.0);
-    }
-    
-    std::unique_ptr<Triangle> default_triangle;
-    std::unique_ptr<Triangle> param_triangle;
-};
-
-TEST_F(TriangleTest, NewInstanceHasZeroCenterAndArea) {
-    auto center = default_triangle->getCenter();
-    ASSERT_DOUBLE_EQ(center.first, 0.0);
-    ASSERT_DOUBLE_EQ(center.second, 0.0);
-    EXPECT_DOUBLE_EQ(default_triangle->getArea(), 0.0);
+// тесты для Triangle
+TEST(TriangleTest, DefaultConstructor) {
+    Triangle t;
+    auto center = t.getCenter();
+    EXPECT_DOUBLE_EQ(center.first, 0.0);
+    EXPECT_DOUBLE_EQ(center.second, 0.0);
+    EXPECT_DOUBLE_EQ(t.getArea(), 0.0);
 }
 
-TEST_F(TriangleTest, ParameterizedConstructionSetsCorrectProperties) {
-    auto center = param_triangle->getCenter();
+TEST(TriangleTest, ParameterizedConstructor) {
+    Triangle t(3.0, 1.0, 2.0);
+    auto center = t.getCenter();
     EXPECT_DOUBLE_EQ(center.first, 1.0);
     EXPECT_DOUBLE_EQ(center.second, 2.0);
-    EXPECT_NEAR(param_triangle->getArea(), 3.897114, 0.0001);
+    EXPECT_NEAR(t.getArea(), 3.897114, 0.0001);
 }
 
-TEST_F(TriangleTest, CopyCreatesIdenticalInstance) {
-    Triangle copied(*param_triangle);
+TEST(TriangleTest, CopyConstructor) {
+    Triangle t1(3.0, 1.0, 2.0);
+    Triangle t2(t1);
     
-    auto original_center = param_triangle->getCenter();
-    auto copied_center = copied.getCenter();
-    EXPECT_DOUBLE_EQ(original_center.first, copied_center.first);
-    EXPECT_DOUBLE_EQ(original_center.second, copied_center.second);
-    EXPECT_DOUBLE_EQ(param_triangle->getArea(), copied.getArea());
+    auto center1 = t1.getCenter();
+    auto center2 = t2.getCenter();
+    EXPECT_DOUBLE_EQ(center1.first, center2.first);
+    EXPECT_DOUBLE_EQ(center1.second, center2.second);
+    EXPECT_DOUBLE_EQ(t1.getArea(), t2.getArea());
 }
 
-TEST_F(TriangleTest, AssignmentOperatorMakesEqualCopy) {
-    Triangle assigned;
-    assigned = *param_triangle;
+TEST(TriangleTest, AssignmentOperator) {
+    Triangle t1(3.0, 1.0, 2.0);
+    Triangle t2;
+    t2 = t1;
     
-    auto original_center = param_triangle->getCenter();
-    auto assigned_center = assigned.getCenter();
-    EXPECT_DOUBLE_EQ(original_center.first, assigned_center.first);
-    EXPECT_DOUBLE_EQ(original_center.second, assigned_center.second);
-    EXPECT_DOUBLE_EQ(param_triangle->getArea(), assigned.getArea());
+    auto center1 = t1.getCenter();
+    auto center2 = t2.getCenter();
+    EXPECT_DOUBLE_EQ(center1.first, center2.first);
+    EXPECT_DOUBLE_EQ(center1.second, center2.second);
+    EXPECT_DOUBLE_EQ(t1.getArea(), t2.getArea());
 }
 
-TEST_F(TriangleTest, MoveOperationTransfersState) {
-    double original_area = param_triangle->getArea();
-    Triangle moved(std::move(*param_triangle));
+TEST(TriangleTest, MoveConstructor) {
+    Triangle t1(3.0, 1.0, 2.0);
+    double area = t1.getArea();
+    Triangle t2(std::move(t1));
     
-    auto center = moved.getCenter();
+    auto center = t2.getCenter();
     EXPECT_DOUBLE_EQ(center.first, 1.0);
     EXPECT_DOUBLE_EQ(center.second, 2.0);
-    EXPECT_DOUBLE_EQ(moved.getArea(), original_area);
+    EXPECT_DOUBLE_EQ(t2.getArea(), area);
 }
 
-TEST_F(TriangleTest, IdenticalTrianglesAreEqual) {
-    Triangle another(3.0, 1.0, 2.0);
-    Triangle different(4.0, 1.0, 2.0);
+TEST(TriangleTest, EqualityOperator) {
+    Triangle t1(3.0, 1.0, 2.0);
+    Triangle t2(3.0, 1.0, 2.0);
+    Triangle t3(4.0, 1.0, 2.0);
     
-    EXPECT_TRUE(*param_triangle == another);
-    EXPECT_FALSE(*param_triangle == different);
+    EXPECT_TRUE(t1 == t2);
+    EXPECT_FALSE(t1 == t3);
 }
 
-TEST_F(TriangleTest, DoubleConversionReturnsArea) {
+TEST(TriangleTest, DoubleConversion) {
     Triangle t(2.0, 0.0, 0.0);
-    double area_value = static_cast<double>(t);
-    EXPECT_NEAR(area_value, 1.73205, 0.0001);
+    double area = static_cast<double>(t);
+    EXPECT_NEAR(area, 1.73205, 0.0001);
 }
 
-// Square test cases
-TEST(SquareTest, DefaultSquareHasOriginCenterAndZeroArea) {
+// тесты для Square
+TEST(SquareTest, DefaultConstructor) {
     Square s;
     auto center = s.getCenter();
     EXPECT_DOUBLE_EQ(center.first, 0.0);
@@ -82,7 +77,7 @@ TEST(SquareTest, DefaultSquareHasOriginCenterAndZeroArea) {
     EXPECT_DOUBLE_EQ(s.getArea(), 0.0);
 }
 
-TEST(SquareTest, SquareWithParametersComputesCorrectArea) {
+TEST(SquareTest, ParameterizedConstructor) {
     Square s(4.0, 2.0, 3.0);
     auto center = s.getCenter();
     EXPECT_DOUBLE_EQ(center.first, 2.0);
@@ -90,28 +85,28 @@ TEST(SquareTest, SquareWithParametersComputesCorrectArea) {
     EXPECT_DOUBLE_EQ(s.getArea(), 16.0);
 }
 
-TEST(SquareTest, SquareCopyPreservesAllAttributes) {
-    Square original(4.0, 2.0, 3.0);
-    Square copy(original);
+TEST(SquareTest, CopyConstructor) {
+    Square s1(4.0, 2.0, 3.0);
+    Square s2(s1);
     
-    auto orig_center = original.getCenter();
-    auto copy_center = copy.getCenter();
-    EXPECT_DOUBLE_EQ(orig_center.first, copy_center.first);
-    EXPECT_DOUBLE_EQ(orig_center.second, copy_center.second);
-    EXPECT_DOUBLE_EQ(original.getArea(), copy.getArea());
+    auto center1 = s1.getCenter();
+    auto center2 = s2.getCenter();
+    EXPECT_DOUBLE_EQ(center1.first, center2.first);
+    EXPECT_DOUBLE_EQ(center1.second, center2.second);
+    EXPECT_DOUBLE_EQ(s1.getArea(), s2.getArea());
 }
 
-TEST(SquareTest, EqualSquaresReturnTrueForEquality) {
-    Square first(4.0, 2.0, 3.0);
-    Square second(4.0, 2.0, 3.0);
-    Square different(5.0, 2.0, 3.0);
+TEST(SquareTest, EqualityOperator) {
+    Square s1(4.0, 2.0, 3.0);
+    Square s2(4.0, 2.0, 3.0);
+    Square s3(5.0, 2.0, 3.0);
     
-    EXPECT_TRUE(first == second);
-    EXPECT_FALSE(first == different);
+    EXPECT_TRUE(s1 == s2);
+    EXPECT_FALSE(s1 == s3);
 }
 
-// Rectangle test cases
-TEST(RectangleTest, NewRectangleInitializesToZero) {
+// тесты для Rectangle
+TEST(RectangleTest, DefaultConstructor) {
     Rectangle r;
     auto center = r.getCenter();
     EXPECT_DOUBLE_EQ(center.first, 0.0);
@@ -119,7 +114,7 @@ TEST(RectangleTest, NewRectangleInitializesToZero) {
     EXPECT_DOUBLE_EQ(r.getArea(), 0.0);
 }
 
-TEST(RectangleTest, RectangleAreaCalculationIsCorrect) {
+TEST(RectangleTest, ParameterizedConstructor) {
     Rectangle r(5.0, 3.0, 2.0, 1.0);
     auto center = r.getCenter();
     EXPECT_DOUBLE_EQ(center.first, 2.0);
@@ -127,77 +122,74 @@ TEST(RectangleTest, RectangleAreaCalculationIsCorrect) {
     EXPECT_DOUBLE_EQ(r.getArea(), 15.0);
 }
 
-TEST(RectangleTest, RectangleCopyMaintainsIntegrity) {
-    Rectangle original(5.0, 3.0, 2.0, 1.0);
-    Rectangle replica(original);
+TEST(RectangleTest, CopyConstructor) {
+    Rectangle r1(5.0, 3.0, 2.0, 1.0);
+    Rectangle r2(r1);
     
-    auto orig_center = original.getCenter();
-    auto replica_center = replica.getCenter();
-    EXPECT_DOUBLE_EQ(orig_center.first, replica_center.first);
-    EXPECT_DOUBLE_EQ(orig_center.second, replica_center.second);
-    EXPECT_DOUBLE_EQ(original.getArea(), replica.getArea());
+    auto center1 = r1.getCenter();
+    auto center2 = r2.getCenter();
+    EXPECT_DOUBLE_EQ(center1.first, center2.first);
+    EXPECT_DOUBLE_EQ(center1.second, center2.second);
+    EXPECT_DOUBLE_EQ(r1.getArea(), r2.getArea());
 }
 
-TEST(RectangleTest, RectangleEqualityCheckWorks) {
-    Rectangle rect1(5.0, 3.0, 2.0, 1.0);
-    Rectangle rect2(5.0, 3.0, 2.0, 1.0);
-    Rectangle rect3(6.0, 3.0, 2.0, 1.0);
+TEST(RectangleTest, EqualityOperator) {
+    Rectangle r1(5.0, 3.0, 2.0, 1.0);
+    Rectangle r2(5.0, 3.0, 2.0, 1.0);
+    Rectangle r3(6.0, 3.0, 2.0, 1.0);
     
-    EXPECT_TRUE(rect1 == rect2);
-    EXPECT_FALSE(rect1 == rect3);
+    EXPECT_TRUE(r1 == r2);
+    EXPECT_FALSE(r1 == r3);
 }
 
-// Figure collection tests
-TEST(FigureCollectionTest, AddAndRemoveOperationsWork) {
-    FigureArray collection;
+
+// тесты для FigureArray
+TEST(FigureArrayTest, AddAndRemoveFigures) {
+    FigureArray array;
+    array.addFigure(std::make_unique<Triangle>(3.0, 0.0, 0.0));
+    array.addFigure(std::make_unique<Square>(4.0, 1.0, 1.0));
+    array.addFigure(std::make_unique<Rectangle>(5.0, 3.0, 2.0, 2.0));
     
-    collection.addFigure(std::make_unique<Triangle>(3.0, 0.0, 0.0));
-    collection.addFigure(std::make_unique<Square>(4.0, 1.0, 1.0));
-    collection.addFigure(std::make_unique<Rectangle>(5.0, 3.0, 2.0, 2.0));
+    EXPECT_EQ(array.size(), 3);
+    array.removeFigure(1);
+    EXPECT_EQ(array.size(), 2);
     
-    EXPECT_EQ(collection.size(), 3);
-    
-    collection.removeFigure(1);
-    ASSERT_EQ(collection.size(), 2);
-    
-    Figure* figure = collection.getFigure(0);
-    EXPECT_NE(figure, nullptr);
-    EXPECT_NEAR(figure->getArea(), 3.897114, 0.0001);
+    Figure* fig = array.getFigure(0);
+    EXPECT_NE(fig, nullptr);
+    EXPECT_NEAR(fig->getArea(), 3.897114, 0.0001);
 }
 
-TEST(FigureCollectionTest, TotalAreaAggregation) {
-    FigureArray collection;
+TEST(FigureArrayTest, TotalAreaCalculation) {
+    FigureArray array;
     
-    collection.addFigure(std::make_unique<Triangle>(2.0, 0.0, 0.0));
-    collection.addFigure(std::make_unique<Square>(2.0, 0.0, 0.0));
-    collection.addFigure(std::make_unique<Rectangle>(3.0, 2.0, 0.0, 0.0));
+    array.addFigure(std::make_unique<Triangle>(2.0, 0.0, 0.0)); // ~1.732
+    array.addFigure(std::make_unique<Square>(2.0, 0.0, 0.0));    // 4.0
+    array.addFigure(std::make_unique<Rectangle>(3.0, 2.0, 0.0, 0.0)); // 6.0
     
-    double total = collection.getTotalArea();
-    EXPECT_NEAR(total, 11.732, 0.001);
+    double totalArea = array.getTotalArea();
+    EXPECT_NEAR(totalArea, 11.732, 0.001);
 }
 
-TEST(FigureCollectionTest, EmptyCollectionBehavior) {
-    FigureArray empty;
+TEST(FigureArrayTest, EmptyArray) {
+    FigureArray array;
     
-    EXPECT_EQ(empty.size(), 0);
-    EXPECT_EQ(empty.getTotalArea(), 0.0);
-    EXPECT_EQ(empty.getFigure(0), nullptr);
-    
-    empty.removeFigure(0); // Should not crash
-    EXPECT_EQ(empty.size(), 0);
+    EXPECT_EQ(array.size(), 0);
+    EXPECT_EQ(array.getTotalArea(), 0.0);
+    EXPECT_EQ(array.getFigure(0), nullptr);
+    array.removeFigure(0);
+    EXPECT_EQ(array.size(), 0);
 }
 
-TEST(FigureCollectionTest, InvalidIndexHandling) {
-    FigureArray collection;
-    collection.addFigure(std::make_unique<Triangle>(3.0, 0.0, 0.0));
-    
-    EXPECT_EQ(collection.getFigure(-1), nullptr);
-    EXPECT_EQ(collection.getFigure(5), nullptr);
-    EXPECT_NE(collection.getFigure(0), nullptr);
+TEST(FigureArrayTest, InvalidIndexAccess) {
+    FigureArray array;
+    array.addFigure(std::make_unique<Triangle>(3.0, 0.0, 0.0));
+    EXPECT_EQ(array.getFigure(-1), nullptr);
+    EXPECT_EQ(array.getFigure(1), nullptr);
+    EXPECT_NE(array.getFigure(0), nullptr);
 }
 
-// Factory function tests
-TEST(FigureFactoryTest, CreatesCorrectFigureTypes) {
+// тесты для создания фигур
+TEST(CreateFigureTest, ValidTypes) {
     auto triangle = createFigure(1);
     auto square = createFigure(2);
     auto rectangle = createFigure(3);
@@ -211,44 +203,51 @@ TEST(FigureFactoryTest, CreatesCorrectFigureTypes) {
     EXPECT_NE(dynamic_cast<Rectangle*>(rectangle.get()), nullptr);
 }
 
-TEST(FigureFactoryTest, InvalidTypeReturnsNull) {
-    EXPECT_EQ(createFigure(0), nullptr);
-    EXPECT_EQ(createFigure(99), nullptr);
+TEST(CreateFigureTest, InvalidType) {
+    auto invalid = createFigure(0);
+    auto invalid2 = createFigure(4);
+    
+    EXPECT_EQ(invalid, nullptr);
+    EXPECT_EQ(invalid2, nullptr);
 }
 
-// Polymorphism verification
-TEST(PolymorphismTest, CommonInterfaceWorks) {
+// тесты для полиморфизма
+TEST(PolymorphismTest, FigurePointerOperations) {
     std::unique_ptr<Figure> triangle = std::make_unique<Triangle>(3.0, 1.0, 2.0);
     std::unique_ptr<Figure> square = std::make_unique<Square>(4.0, 2.0, 3.0);
     std::unique_ptr<Figure> rectangle = std::make_unique<Rectangle>(5.0, 3.0, 3.0, 4.0);
 
-    EXPECT_DOUBLE_EQ(triangle->getCenter().first, 1.0);
-    EXPECT_DOUBLE_EQ(triangle->getCenter().second, 2.0);
-    EXPECT_DOUBLE_EQ(square->getCenter().first, 2.0);
-    EXPECT_DOUBLE_EQ(square->getCenter().second, 3.0);
-    EXPECT_DOUBLE_EQ(rectangle->getCenter().first, 3.0);
-    EXPECT_DOUBLE_EQ(rectangle->getCenter().second, 4.0);
+    auto center_t = triangle->getCenter();
+    auto center_s = square->getCenter();
+    auto center_r = rectangle->getCenter();
+    
+    EXPECT_DOUBLE_EQ(center_t.first, 1.0);
+    EXPECT_DOUBLE_EQ(center_t.second, 2.0);
+    EXPECT_DOUBLE_EQ(center_s.first, 2.0);
+    EXPECT_DOUBLE_EQ(center_s.second, 3.0);
+    EXPECT_DOUBLE_EQ(center_r.first, 3.0);
+    EXPECT_DOUBLE_EQ(center_r.second, 4.0);
 
-    EXPECT_NEAR(static_cast<double>(*triangle), 3.897114, 0.0001);
-    EXPECT_DOUBLE_EQ(static_cast<double>(*square), 16.0);
-    EXPECT_DOUBLE_EQ(static_cast<double>(*rectangle), 15.0);
+    double area_t = static_cast<double>(*triangle);
+    double area_s = static_cast<double>(*square);
+    double area_r = static_cast<double>(*rectangle);
+    
+    EXPECT_NEAR(area_t, 3.897114, 0.0001);
+    EXPECT_DOUBLE_EQ(area_s, 16.0);
+    EXPECT_DOUBLE_EQ(area_r, 15.0);
 }
 
-TEST(FigureComparisonTest, DifferentTypesAreNotEqual) {
+
+TEST(FigureTypesTest, DifferentTypesNotEqual) {
     Triangle triangle(3.0, 1.0, 2.0);
     Square square(3.0, 1.0, 2.0);
     Rectangle rectangle(3.0, 3.0, 1.0, 2.0);
-    
     EXPECT_FALSE(triangle == square);
     EXPECT_FALSE(triangle == rectangle);
     EXPECT_FALSE(square == rectangle);
 }
 
-int runTests(int argc, char **argv) {
+int main(int argc, char **argv) {
     ::testing::InitGoogleTest(&argc, argv);
     return RUN_ALL_TESTS();
-}
-
-int main(int argc, char **argv) {
-    return runTests(argc, argv);
 }
