@@ -1,6 +1,0 @@
-cd build
-cmake ..
-cmake --build . --config Release
-
-.\Release\FiguresApp.exe
-.\Release\FiguresTests.exe
